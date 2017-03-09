@@ -1,9 +1,23 @@
 var svg = document.getElementById("vector");
 var rid = 0;
 
+var addRandom = function(e) {
+    r = 20;
+    x = Math.random()*500;
+    y = Math.random()*500;
+    var dot = makeDot(x, y);
+    svg.appendChild(dot);
+}
+
 var circleClick = function(e) {
     console.log("CIRCLE"+e.target); // displays original element
-    this.setAttribute("fill","blue");
+    if(this.getAttribute("fill")=="green"){
+	this.setAttribute("fill","blue");
+    }else{
+	svg.removeChild(this);
+	//add random thingy
+	addRandom();
+    }
     e.stopPropagation(); // stop capturing/bubbling
 }
 
@@ -32,7 +46,16 @@ var clear = function(e) {
     }
 };
 
+var movedots = function(e){
+
+    // do stuff
+
+}
+
 var clearBtn = document.getElementById("clear_btn");
 clearBtn.addEventListener("click", clear);
+
+var moveb = document.getElementById("move");
+moveb.addEventListener("click", movedots);
 
 svg.addEventListener("click", drawDot);//, true);
