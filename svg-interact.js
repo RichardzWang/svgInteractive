@@ -4,10 +4,9 @@ var rid = 0;
 var move = false;
 
 var addRandom = function(e) {
-    r = 20;
     x = Math.random()*500;
     y = Math.random()*500;
-    var dot = makeDot(x, y);
+    var dot = makeDot(x, y, 20, 1, 1);
     svg.appendChild(dot);
 }
 
@@ -21,15 +20,14 @@ var circleClick = function(e) {
 	addRandom();
     }
     e.stopPropagation(); // stop capturing/bubbling
-}
+};
 
-var makeDot = function(x, y) {    
-    var r = 20;   
+var makeDot = function(x, y, r, vx, vy) {    
     var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
     c.setAttribute("cx", x);
     c.setAttribute("cy", y);
-    c.setAttribute("vx", 1);
-    c.setAttribute("vy", 1);
+    c.setAttribute("vx", vx);
+    c.setAttribute("vy", vy);
     c.setAttribute("r", r);
     c.setAttribute("fill", "green");
     c.addEventListener("click", circleClick, true);
@@ -38,7 +36,7 @@ var makeDot = function(x, y) {
 
 var drawDot = function(e) {
     if(this==e.target){
-	var dot = makeDot( e.offsetX, e.offsetY );
+	var dot = makeDot( e.offsetX, e.offsetY, 20, 1, 1 );
 	svg.appendChild( dot );
     }
     console.log("SVG"+e.target);
@@ -66,21 +64,32 @@ var bounce = function(e) {
 	for (i = 0; i < svg.childNodes.length; i++) {
 	    var circle = svg.childNodes[i];
 
-	    if (parseInt(circle.getAttribute("cx"))+20 >= 500) {
+	    var x = parseInt(circle.getAttribute("cx"));
+	    var y = parseInt(circle.getAttribute("cy"));
+	    var vx = parseInt(circle.getAttribute("vx"));
+	    var vy = parseInt(circle.getAttribute("vy"));
+	    var r = parseInt(circle.getAttribute("r"));
+	    
+
+	    if (x+20 >= 500) {
 		circle.setAttribute("vx",-1);
 	    }
-	    if (parseInt(circle.getAttribute("cy"))+20 >= 500) {
+	    if (y+20 >= 500) {
 		circle.setAttribute("vy",-1);
 	    }
-	    if (parseInt(circle.getAttribute("cx"))-20 <= 0) {
+	    if (x-20 <= 0) {
 		circle.setAttribute("vx",1);
 	    }
-	    if (parseInt(circle.getAttribute("cy"))-20 <= 0) {
+	    if (y-20 <= 0) {
 		circle.setAttribute("vy",1);
-	    }	    
+	    }
+	    if (x == 250) {
+		circle.setAttribute("r",r/2);
+		makeDot(x,y,-vx,-vy,r/2);
+	    } 	    	    
 	    
-	    svg.childNodes[i].setAttribute("cx", parseFloat(circle.getAttribute("cx")) + parseInt(circle.getAttribute("vx")));
-	    svg.childNodes[i].setAttribute("cy", parseFloat(circle.getAttribute("cy")) + parseInt(circle.getAttribute("vy")));
+	    circle.setAttribute("cx", x + vx);
+	    circle.setAttribute("cy", y + vy);
 	}
 
 
