@@ -85,7 +85,7 @@ var bounce = function(e) {
 	    }
 	    if (x == 250) {
 		circle.setAttribute("r",r/2);
-		makeDot(x,y,-vx,-vy,r/2);
+		svg.append(makeDot(x,y,-vx,-vy,r/2));
 	    } 	    	    
 	    
 	    circle.setAttribute("cx", x + vx);
