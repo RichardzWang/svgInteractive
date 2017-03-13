@@ -68,34 +68,53 @@ var bounce = function(e) {
 	    var y = parseInt(circle.getAttribute("cy"));
 	    var vx = parseInt(circle.getAttribute("vx"));
 	    var vy = parseInt(circle.getAttribute("vy"));
-	    var r = parseInt(circle.getAttribute("r"));
+	    var r = parseFloat(circle.getAttribute("r"));
 	    
 
-	    if (x+20 >= 500) {
-		circle.setAttribute("vx",-1);
+	    if (x+r >= 500) {
+		svg.childNodes[i].setAttribute("vx",-1);
 	    }
-	    if (y+20 >= 500) {
-		circle.setAttribute("vy",-1);
+	    if (y+r >= 500) {
+		svg.childNodes[i].setAttribute("vy",-1);
 	    }
-	    if (x-20 <= 0) {
-		circle.setAttribute("vx",1);
+	    if (x-r <= 0) {
+		svg.childNodes[i].setAttribute("vx",1);
 	    }
-	    if (y-20 <= 0) {
-		circle.setAttribute("vy",1);
+	    if (y-r <= 0) {
+		svg.childNodes[i].setAttribute("vy",1);
 	    }
-	    if (x == 250) {
-		circle.setAttribute("r",r/2);
-		var dot = makeDot(x,y,r/2,-vx,-vy);
-		svg.appendChild(dot);
-	    } 	    	    
 	    
-	    circle.setAttribute("cx", x + vx);
-	    circle.setAttribute("cy", y + vy);
+	    svg.childNodes[i].setAttribute("cx", x + vx);
+	    svg.childNodes[i].setAttribute("cy", y + vy);
+
+	    if (x == 250) {
+		split(svg.childNodes[i]);
+	    } 	    	    
 	}
 
 
     
     rid = window.requestAnimationFrame(bounce);
+};
+
+var split = function (circle) {
+
+    var x = parseInt(circle.getAttribute("cx"));
+    var y = parseInt(circle.getAttribute("cy"));
+    var vx = parseInt(circle.getAttribute("vx"));
+    var vy = parseInt(circle.getAttribute("vy"));
+    var r = parseFloat(circle.getAttribute("r"));
+    
+    if (r < 1) {
+	circle.remove();
+    }
+    else {
+	console.log(r/2);
+	var dot = makeDot(x,y,r/2,-vx,-vy);
+	svg.appendChild(dot);
+	console.log(r/2);
+	circle.setAttribute("r",r/2);
+    }
 };
 
 var clearBtn = document.getElementById("clear_btn");
